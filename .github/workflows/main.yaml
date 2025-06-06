@@ -54,12 +54,18 @@ jobs:
           fetch-depth: 0
       - name: Create branch from commit by event name
         run: |
-          if [[ '${{ github.event_name }}' == 'push' && '${{ github.event.before }}' != '0000000000000000000000000000000000000000' ]]; then
-            git branch __branch_before ${{ github.event.before }}
-          elif [[ '${{ github.event_name }}' == 'pull_request' ]]; then
-            git branch __branch_before ${{ github.event.pull_request.base.sha }}
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            BEFORE_SHA="${{ github.event.before }}"
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BEFORE_SHA="${{ github.event.pull_request.base.sha }}"
+          fi
+
+          # Validate the SHA before creating the branch
+          if git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+            git branch __branch_before "$BEFORE_SHA"
+            echo "Created __branch_before from $BEFORE_SHA"
           else
-            echo "Skipping branch creation due to invalid or missing base SHA"
+            echo "Skipping branch creation: $BEFORE_SHA is not a valid commit"
           fi
 
       - name: Set up JDK ${{ matrix.java_version }}
