@@ -64,6 +64,29 @@ class GoogleAiGeminiChatModelIT {
 
     private static final String CAT_IMAGE_URL =
             "https://upload.wikimedia.org/wikipedia/commons/e/e9/Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png";
+    //testing the feature
+    @Test
+    void should_apply_thinking_config_with_thinking_budget() {
+        GoogleAiGeminiChatModel gemini = GoogleAiGeminiChatModel.builder()
+                .apiKey(GOOGLE_AI_GEMINI_API_KEY)
+                .modelName("gemini-2.5-flash")
+                .thinkingBudget(1024)
+                .logRequestsAndResponses(true)  // Helpful for debugging
+                .build();
+
+        // when
+        ChatResponse response = gemini.chat(ChatRequest.builder()
+                .messages(UserMessage.from("List 3 famous physicists and their key contributions."))
+                .build());
+
+        // then
+        String text = response.aiMessage().text();
+        System.out.println("Gemini Response with thinkingConfig: " + text);
+
+        assertThat(text).containsIgnoringCase("Einstein");
+        assertThat(text).containsIgnoringCase("Newton");
+        assertThat(text).containsIgnoringCase("Bohr");
+    }
 
     @Test
     void should_answer_simple_question() {

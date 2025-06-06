@@ -16,6 +16,9 @@ class GeminiGenerationConfig {
     private Double temperature = 1.0;
     private Integer topK = 64;
     private Double topP = 0.95;
+    //New field for ThinkingConfig
+    @JsonProperty("thinkingConfig")
+    private ThinkingConfig thinkingConfig;
 
     @JsonCreator
     GeminiGenerationConfig(
@@ -26,7 +29,10 @@ class GeminiGenerationConfig {
             @JsonProperty("maxOutputTokens") Integer maxOutputTokens,
             @JsonProperty("temperature") Double temperature,
             @JsonProperty("topK") Integer topK,
-            @JsonProperty("topP") Double topP) {
+            @JsonProperty("topP") Double topP,
+            //Serialization
+            @JsonProperty("thinkingConfig") ThinkingConfig thinkingConfig
+    ) {
         this.stopSequences = stopSequences;
         this.responseMimeType = responseMimeType;
         this.responseSchema = responseSchema;
@@ -35,6 +41,9 @@ class GeminiGenerationConfig {
         this.temperature = temperature;
         this.topK = topK;
         this.topP = topP;
+        //adding thinkingConfig to the constructor
+        this.thinkingConfig = thinkingConfig;
+
     }
 
     public static GeminiGenerationConfigBuilder builder() {
@@ -71,6 +80,17 @@ class GeminiGenerationConfig {
 
     public Double getTopP() {
         return this.topP;
+    }
+
+    //getter method
+    public ThinkingConfig getThinkingConfig(){
+        return thinkingConfig;
+    }
+
+    //setter method
+    public void setThinkingConfig(ThinkingConfig thinkingConfig){
+        this.thinkingConfig = thinkingConfig;
+
     }
 
     public void setStopSequences(List<String> stopSequences) {
@@ -182,9 +202,17 @@ class GeminiGenerationConfig {
         private Double temperature;
         private Integer topK;
         private Double topP;
+        //adding thinkingConfig
+        private ThinkingConfig thinkingConfig;
 
         GeminiGenerationConfigBuilder() {
         }
+
+        public GeminiGenerationConfigBuilder thinkingConfig(ThinkingConfig thinkingConfig) {
+            this.thinkingConfig = thinkingConfig;
+            return this;
+        }
+
 
         public GeminiGenerationConfigBuilder stopSequences(List<String> stopSequences) {
             this.stopSequences = stopSequences;
@@ -227,7 +255,7 @@ class GeminiGenerationConfig {
         }
 
         public GeminiGenerationConfig build() {
-            return new GeminiGenerationConfig(this.stopSequences, this.responseMimeType, this.responseSchema, this.candidateCount, this.maxOutputTokens, this.temperature, this.topK, this.topP);
+            return new GeminiGenerationConfig(this.stopSequences, this.responseMimeType, this.responseSchema, this.candidateCount, this.maxOutputTokens, this.temperature, this.topK, this.topP,this.thinkingConfig);
         }
 
         public String toString() {

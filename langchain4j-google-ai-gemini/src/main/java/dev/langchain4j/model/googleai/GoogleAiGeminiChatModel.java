@@ -48,12 +48,14 @@ public class GoogleAiGeminiChatModel extends BaseGeminiChatModel implements Chat
             Boolean allowCodeExecution, Boolean includeCodeExecutionOutput,
             Boolean logRequestsAndResponses,
             List<GeminiSafetySetting> safetySettings,
-            List<ChatModelListener> listeners
+            List<ChatModelListener> listeners,
+            //updating constructor
+            Integer thinkingBudget
     ) {
         super(apiKey, modelName, temperature, topK, topP, maxOutputTokens, timeout,
                 responseFormat, stopSequences, toolConfig, allowCodeExecution,
                 includeCodeExecutionOutput, logRequestsAndResponses, safetySettings,
-                listeners, maxRetries);
+                listeners, maxRetries,thinkingBudget);
     }
 
     public static GoogleAiGeminiChatModelBuilder builder() {
@@ -189,6 +191,9 @@ public class GoogleAiGeminiChatModel extends BaseGeminiChatModel implements Chat
         private Boolean logRequestsAndResponses;
         private List<GeminiSafetySetting> safetySettings;
         private List<ChatModelListener> listeners;
+        //new field
+        private Integer thinkingBudget;
+
 
         GoogleAiGeminiChatModelBuilder() {
         }
@@ -284,9 +289,16 @@ public class GoogleAiGeminiChatModel extends BaseGeminiChatModel implements Chat
             this.listeners = listeners;
             return this;
         }
-
+        //added thinkingBudget
         public GoogleAiGeminiChatModel build() {
-            return new GoogleAiGeminiChatModel(this.apiKey, this.modelName, this.maxRetries, this.temperature, this.topK, this.topP, this.maxOutputTokens, this.timeout, this.responseFormat, this.stopSequences, this.toolConfig, this.allowCodeExecution, this.includeCodeExecutionOutput, this.logRequestsAndResponses, this.safetySettings, this.listeners);
+            return new GoogleAiGeminiChatModel(this.apiKey, this.modelName, this.maxRetries, this.temperature, this.topK, this.topP, this.maxOutputTokens, this.timeout, this.responseFormat, this.stopSequences, this.toolConfig, this.allowCodeExecution, this.includeCodeExecutionOutput, this.logRequestsAndResponses, this.safetySettings, this.listeners,this.thinkingBudget);
         }
+        //setter  method
+        public GoogleAiGeminiChatModelBuilder thinkingBudget(Integer thinkingBudget) {
+            this.thinkingBudget = thinkingBudget;
+            return this;
+        }
+
+
     }
 }

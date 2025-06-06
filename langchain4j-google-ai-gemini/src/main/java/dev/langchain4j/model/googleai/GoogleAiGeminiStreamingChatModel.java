@@ -48,12 +48,14 @@ public class GoogleAiGeminiStreamingChatModel extends BaseGeminiChatModel implem
             Boolean logRequestsAndResponses,
             List<GeminiSafetySetting> safetySettings,
             List<ChatModelListener> listeners,
-            Integer maxRetries
+            Integer maxRetries,
+            Integer thinkingBudget
+
     ) {
         super(apiKey, modelName, temperature, topK, topP, maxOutputTokens, timeout,
                 responseFormat, stopSequences, toolConfig, allowCodeExecution,
                 includeCodeExecutionOutput, logRequestsAndResponses, safetySettings,
-                listeners, maxRetries);
+                listeners, maxRetries,thinkingBudget);
     }
 
     public static GoogleAiGeminiStreamingChatModelBuilder builder() {
@@ -174,6 +176,7 @@ public class GoogleAiGeminiStreamingChatModel extends BaseGeminiChatModel implem
         private List<GeminiSafetySetting> safetySettings;
         private List<ChatModelListener> listeners;
         private Integer maxRetries;
+        private Integer thinkingBudget;
 
         GoogleAiGeminiStreamingChatModelBuilder() {
         }
@@ -271,7 +274,7 @@ public class GoogleAiGeminiStreamingChatModel extends BaseGeminiChatModel implem
         }
 
         public GoogleAiGeminiStreamingChatModel build() {
-            return new GoogleAiGeminiStreamingChatModel(this.apiKey, this.modelName, this.temperature, this.topK, this.topP, this.maxOutputTokens, this.timeout, this.responseFormat, this.stopSequences, this.toolConfig, this.allowCodeExecution, this.includeCodeExecutionOutput, this.logRequestsAndResponses, this.safetySettings, this.listeners, this.maxRetries);
+            return new GoogleAiGeminiStreamingChatModel(this.apiKey, this.modelName, this.temperature, this.topK, this.topP, this.maxOutputTokens, this.timeout, this.responseFormat, this.stopSequences, this.toolConfig, this.allowCodeExecution, this.includeCodeExecutionOutput, this.logRequestsAndResponses, this.safetySettings, this.listeners, this.maxRetries, this.thinkingBudget);
         }
 
         public String toString() {
