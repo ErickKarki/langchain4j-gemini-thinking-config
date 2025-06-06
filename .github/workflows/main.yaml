@@ -54,11 +54,14 @@ jobs:
           fetch-depth: 0
       - name: Create branch from commit by event name
         run: |
-          if [[ '${{ github.event_name }}' == 'push' ]]; then
+          if [[ '${{ github.event_name }}' == 'push' && '${{ github.event.before }}' != '0000000000000000000000000000000000000000' ]]; then
             git branch __branch_before ${{ github.event.before }}
-          elif [[ "${{ github.event_name }}" == 'pull_request' ]]; then
+          elif [[ '${{ github.event_name }}' == 'pull_request' ]]; then
             git branch __branch_before ${{ github.event.pull_request.base.sha }}
+          else
+            echo "Skipping branch creation due to invalid or missing base SHA"
           fi
+
       - name: Set up JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
